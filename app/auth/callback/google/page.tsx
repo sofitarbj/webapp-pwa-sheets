@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { storeGoogleToken } from '@/lib/googleOAuth'
 
 export const dynamic = 'force-dynamic'
 
-export default function GoogleCallbackPage() {
+function GoogleCallbackContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [error, setError] = useState<string | null>(null)
@@ -74,5 +74,17 @@ export default function GoogleCallbackPage() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function GoogleCallbackPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        }>
+            <GoogleCallbackContent />
+        </Suspense>
     )
 }
